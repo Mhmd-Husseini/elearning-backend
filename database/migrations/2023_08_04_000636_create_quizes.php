@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('follows', function (Blueprint $table) {
+        Schema::create('quizes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('follower_id');
+            $table->unsignedBigInteger('course_id');
+            $table->string('title');
+            $table->text('description');
+            $table->string('link');
+            $table->date('due');
+            $table->integer('rubric');
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('follows');
+        Schema::dropIfExists('quizes');
     }
 };

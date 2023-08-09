@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Lecture extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id', 
-        'img_url', 
-        'caption', 
+        'course_id', 
+        'title', 
+        'description'
     ];
 }
