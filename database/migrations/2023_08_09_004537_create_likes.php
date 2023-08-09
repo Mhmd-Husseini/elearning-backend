@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assignments', function (Blueprint $table) {
+        Schema::create('likes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('course_id');
-            $table->string('title');
-            $table->text('description');
-            $table->text('file');
-            $table->date('due');
-            $table->integer('rubric');
+            $table->unsignedInteger('post_id');
+            $table->unsignedInteger('user_id');
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assignments');
+        Schema::dropIfExists('likes');
     }
 };

@@ -5,13 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+class Like extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'post_id', 
         'user_id', 
-        'quiz_id', 
-        'assignment_id', 
-        'body'
     ];
 }
