@@ -153,6 +153,14 @@ class AdminController extends Controller
         }
     }
 
+    public function getCourseById(Course $course){
+        try{
+            return $this->customResponse($course->load('category'));
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
+
     public function getCourseCategory(){
         try{
             $category = Category::all();
