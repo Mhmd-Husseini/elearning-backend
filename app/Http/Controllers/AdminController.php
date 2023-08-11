@@ -153,6 +153,21 @@ class AdminController extends Controller
         }
     }
 
+    public function deleteCourse($id){
+        try{
+            $course = Course::find($id);
+
+            if (!$course) {
+                return $this->customResponse('Course not found', 'error', 404);
+            }
+
+            $course->delete();
+            return $this->customResponse($course, 'Deleted Successfully');
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
+
     function customResponse($data, $status = 'success', $code = 200){
         $response = ['status' => $status,'data' => $data];
         return response()->json($response,$code);
