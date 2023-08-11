@@ -70,7 +70,7 @@ class AdminController extends Controller
         }
     }
 
-    function getById(User $user){
+    public function getById(User $user){
         try{
             return $this->customResponse($user->load('type'));
         }catch(Exception $e){
@@ -78,7 +78,7 @@ class AdminController extends Controller
         }
     }
 
-    function getUsers(User_type $user_type){
+    public function getUsers(User_type $user_type){
         try{
             $users = User::where('user_type_id', $user_type->id)->get();
             // $Users = User::with('type')->where('user_type_id', $user_type)->get();
@@ -89,7 +89,7 @@ class AdminController extends Controller
         }
     }
 
-    function updateUser(Request $request_info){
+    public function updateUser(Request $request_info){
         try{
             $user = User::find($request_info->id);
             $user->name = $request_info->name;
@@ -128,7 +128,7 @@ class AdminController extends Controller
         }
     }
 
-    function updateCourse(Request $request_info){
+    public function updateCourse(Request $request_info){
         try{
             $course = Course::find($request_info->id);
             $course->name = $request_info->name;
@@ -144,7 +144,16 @@ class AdminController extends Controller
         }
     }
 
-    function getCourseCategory(){
+    public function getCourses(){
+        try{
+            $courses = Course::with('category')->get();
+            return $this->customResponse($courses);
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
+
+    public function getCourseCategory(){
         try{
             $category = Category::all();
             return $this->customResponse($category);
