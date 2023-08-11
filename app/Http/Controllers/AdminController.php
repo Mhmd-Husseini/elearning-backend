@@ -127,6 +127,21 @@ class AdminController extends Controller
         }
     }
 
+    function updateCourse(Request $request_info){
+        try{
+            $course = Course::find($request_info->id);
+            $course->name = $request_info->name;
+            $course->description = $request_info->description;
+            $course->teacher_id = $request_info->teacher_id;
+            $course->category_id = $request_info->category_id;
+            $course->save();
+
+            return $this->customResponse($course, 'Updated Successfully');
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
+
     function getCourseCategory(){
         try{
             $category = Category::all();
