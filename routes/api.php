@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminController;
 
         Route::group(["middleware" => "auth.admin", 'prefix' => 'admin'], function(){
             Route::post('/addUser', [AdminController::class, "addUser"]);
+            Route::delete('/deleteUser/{id?}', [AdminController::class, "deleteUser"]);
         });
     
         Route::group(["middleware" => "auth.teacher"], function(){

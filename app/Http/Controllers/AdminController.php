@@ -38,7 +38,32 @@ class AdminController extends Controller
 
             return $this->customResponse($user, 'User Created Successfully');
         } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
+
+    public function deleteUser($id){
+        try{
+            $user = User::find($id);
+
+            if (!$user) {
+                return $this->customResponse('User not found', 'error', 404);
+            }
+
+            $userType = $user->user_type_id;
+            
+
+            if ($userType == 4) {
+                $hasChildren = $user->students()->exists();
+                if($hasChildren){
+                    return $this->customResponse('Cannot delete parent. It has students.', 'error', 400);
+                }   
+            }
+
+            $user->delete();
+            return $this->customResponse($user, 'Deleted Successfully');
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
         }
     }
 
