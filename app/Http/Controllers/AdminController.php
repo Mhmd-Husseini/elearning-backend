@@ -67,6 +67,14 @@ class AdminController extends Controller
         }
     }
 
+    function getById(User $user){
+        try{
+            return $this->customResponse($user->load('type'));
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
+
     function customResponse($data, $status = 'success', $code = 200){
         $response = ['status' => $status,'data' => $data];
         return response()->json($response,$code);
