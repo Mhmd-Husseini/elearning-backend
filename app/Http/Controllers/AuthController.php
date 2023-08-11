@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\User_type;
+
 
 class AuthController extends Controller
 {
@@ -18,7 +20,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|string|email',
-            'password' => 'required|string',
+            'password' => 'required|string|min:8',
         ]);
         $credentials = $request->only('email', 'password');
 
@@ -27,17 +29,19 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized',
-            ], 401);
+            ]);
         }
 
         $user = Auth::user();
+        $type = $user->user_type_id;
+        $role = User_Type::join('users', 'user_types.id', '=', 'users.user_type_id')
+         ->where('users.id', $user->id)
+         ->value('user_types.role');
+
         return response()->json([
                 'status' => 'success',
-                'user' => $user,
-                'authorisation' => [
-                    'token' => $token,
-                    'type' => 'bearer',
-                ]
+                'role' => $role,
+                'token' => $token,
             ]);
 
     }
@@ -53,6 +57,8 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'user_type_id'=> $request->user_type_id, 
+            'parent_id'=> $request->parent_id, 
         ]);
 
         $token = Auth::login($user);
@@ -60,11 +66,10 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'User created successfully',
             'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
+            'token' => $token,
+            'type' => 'bearer',
             ]
-        ]);
+        );
     }
 
     public function logout()

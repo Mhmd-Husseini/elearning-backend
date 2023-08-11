@@ -14,11 +14,14 @@ use App\Http\Controllers\AuthController;
 |
 */
 
+    Route::post("/login", [AuthController::class, "login"]);
+    Route::post("/register", [AuthController::class, "register"]);
+
+
     Route::group(["middleware" => "auth:api"], function(){
-        $user = Auth::user(); 
+
         
         Route::group(["middleware" => "auth.admin"], function(){
-
         });
     
         Route::group(["middleware" => "auth.teacher"], function(){
