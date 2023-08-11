@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Course;
 use App\Models\User;
 use App\Models\User_type;
 use Illuminate\Http\Request;
@@ -109,6 +110,23 @@ class AdminController extends Controller
     }
 
     //Course Functions
+    public function addCourse(Request $request_info){
+        try{
+            $validated_data = $this->validate($request_info, [
+                'name' => ['required','string'],
+                'description' => ['string'],
+                'teacher_id' => ['required','exists:users,id'],
+                'category_id' => ['required','exists:categories,id']
+            ]); 
+
+            $course = Course::create($validated_data);
+
+            return $this->customResponse($course, 'Course Created Successfully');
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
+
     function getCourseCategory(){
         try{
             $category = Category::all();

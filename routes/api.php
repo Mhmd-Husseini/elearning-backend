@@ -25,7 +25,7 @@ use App\Http\Controllers\AdminController;
                 Route::post('/updateCourse', [AdminController::class, "updateCourse"]);
 
                 Route::get('/getCourse/{course}', [AdminController::class, "getCourseById"]);
-                Route::get('/getUsers/{user_type}', [AdminController::class, "getUsers"]);
+                Route::get('/getCourses/{}', [AdminController::class, "getCourses"]);
                 Route::get('/getCategories', [AdminController::class, "getCourseCategory"]);
 
                 Route::delete('/deleteCourse/{id}', [AdminController::class, "deleteCourse"]);
