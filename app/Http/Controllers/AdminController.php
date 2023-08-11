@@ -115,6 +115,7 @@ class AdminController extends Controller
             $validated_data = $this->validate($request_info, [
                 'name' => ['required','string'],
                 'description' => ['string'],
+                'seats' => ['integer'],
                 'teacher_id' => ['required','exists:users,id'],
                 'category_id' => ['required','exists:categories,id']
             ]); 
@@ -132,6 +133,7 @@ class AdminController extends Controller
             $course = Course::find($request_info->id);
             $course->name = $request_info->name;
             $course->description = $request_info->description;
+            $course->seats = $request_info->seats;
             $course->teacher_id = $request_info->teacher_id;
             $course->category_id = $request_info->category_id;
             $course->save();
