@@ -75,6 +75,17 @@ class AdminController extends Controller
         }
     }
 
+    function getUsers(User_type $user_type){
+        try{
+            $users = User::where('user_type_id', $user_type->id)->get();
+            // $Users = User::with('type')->where('user_type_id', $user_type)->get();
+            echo $users;
+            // return $this->customResponse($user_type->load('type'));
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
+
     function customResponse($data, $status = 'success', $code = 200){
         $response = ['status' => $status,'data' => $data];
         return response()->json($response,$code);

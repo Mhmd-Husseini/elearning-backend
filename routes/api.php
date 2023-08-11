@@ -15,6 +15,7 @@ use App\Http\Controllers\AdminController;
             Route::post('/addUser', [AdminController::class, "addUser"]);
 
             Route::get('/getUser/{user}', [AdminController::class, "getById"]);
+            Route::get('/getUsers/{user_type}', [AdminController::class, "getUsers"]);
 
             Route::delete('/deleteUser/{id}', [AdminController::class, "deleteUser"]);
         });
