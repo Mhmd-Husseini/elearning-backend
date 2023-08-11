@@ -22,7 +22,9 @@ class AuthenticateAdmin
             return $next($request);
         }
         
-        return redirect()->route("unauthorized");
-       
+        return response()->json([
+            'status' => 'Error',
+            'message' => 'Unauthorized',
+        ], 200);       
     }
 }

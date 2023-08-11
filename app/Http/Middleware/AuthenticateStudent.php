@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Auth;
 
 
-class AuthenticateAdmin
+class AuthenticateStudent
 {
     /**
      * Handle an incoming request.
@@ -22,7 +22,9 @@ class AuthenticateAdmin
             return $next($request);
         }
         
-        return redirect()->route("unauthorized");
-       
+        return response()->json([
+            'status' => 'Error',
+            'message' => 'Unauthorized',
+        ], 200);       
     }
 }
