@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Category;
 use App\Models\User;
 use App\Models\User_type;
 use Illuminate\Http\Request;
@@ -11,7 +13,7 @@ use function Laravel\Prompts\password;
 
 class AdminController extends Controller
 {
-
+    // User Functions
     public function addUser(Request $request)
     {
         try {
@@ -106,6 +108,15 @@ class AdminController extends Controller
         }
     }
 
+    //Course Functions
+    function getCourseCategory(){
+        try{
+            $category = Category::all();
+            return $this->customResponse($category);
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
 
     function customResponse($data, $status = 'success', $code = 200){
         $response = ['status' => $status,'data' => $data];
