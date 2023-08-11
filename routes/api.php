@@ -13,7 +13,8 @@ use App\Http\Controllers\AdminController;
 
         Route::group(["middleware" => "auth.admin", 'prefix' => 'admin'], function(){
             Route::post('/addUser', [AdminController::class, "addUser"]);
-
+            Route::post('/updateUser', [AdminController::class, "updateUser"]);
+            
             Route::get('/getUser/{user}', [AdminController::class, "getById"]);
             Route::get('/getUsers/{user_type}', [AdminController::class, "getUsers"]);
 

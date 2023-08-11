@@ -86,6 +86,27 @@ class AdminController extends Controller
         }
     }
 
+    function updateUser(Request $request_info){
+        try{
+            $user = User::find($request_info->id);
+            $user->name = $request_info->name;
+            $user->email = $request_info->email;
+            $user->password = $request_info->password;
+            $user->user_type_id = $request_info->user_type_id;
+
+            if($request_info->user_type_id == 3 ){
+                $user->parent_id = $request_info->parent_id;
+            }
+
+            $user->save();
+
+            return $this->customResponse($user, 'Updated Successfully');
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
+
+
     function customResponse($data, $status = 'success', $code = 200){
         $response = ['status' => $status,'data' => $data];
         return response()->json($response,$code);
