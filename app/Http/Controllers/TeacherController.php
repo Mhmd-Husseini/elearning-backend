@@ -46,9 +46,28 @@ class TeacherController extends Controller
     public function getCourses(Request $request)
     {
         $teacherId = Auth::user()->id;
-        $courses = Course::where('teacher_id', $teacherId)->get();
-        return response()->json(['courses' => $courses]);
+        $courses = Course::join('categories', 'courses.category_id', '=', 'categories.id')
+            ->where('courses.teacher_id', $teacherId)
+            ->select('courses.id', 'categories.category', 'courses.teacher_id', 'courses.name', 'courses.description')
+            ->get();
+        return response()->json($courses);
     }
 
+    public function getCourseDetails(Request $request, $courseId)
+    {
+        $course = Course::with([
+            'students.parent',
+            'quizes',
+            'assignments',
+            'lectures',
+            'materials'
+        ])->find($courseId);
 
+        if (!$course) {
+            return response()->json(['message' => 'Course not found'], 404);
+        }
+
+        return response()->json(['course' => $course]);
+    }
 }
+

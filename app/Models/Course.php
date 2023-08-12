@@ -1,9 +1,13 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Category;
+use App\Models\User;
+use App\Models\Quiz;
+use App\Models\Assignment;
+use App\Models\Lecture;
+use App\Models\Material;
 
 class Course extends Model
 {
@@ -14,4 +18,36 @@ class Course extends Model
         'description',
         'category_id',
     ];
+
+    public function category(){
+    return $this->belongsTo(Category::class);
+    }
+
+    
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'enrollment_courses', 'course_id', 'user_id')
+            ->where('users.user_type_id', '=', 3);
+    }
+
+    public function quizes()
+    {
+        return $this->hasMany(Quiz::class);
+    }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
+    public function lectures()
+    {
+        return $this->hasMany(Lecture::class);
+    }
+
+    public function materials()
+    {
+        return $this->hasMany(Material::class);
+    }
 }
+
