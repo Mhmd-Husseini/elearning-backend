@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Quiz;
 use App\Models\Assignment;
 use App\Models\Lecture;
 use App\Models\Material;
+use App\Models\Course;
 
 class TeacherController extends Controller
 {
@@ -38,6 +40,15 @@ class TeacherController extends Controller
                 return response()->json(['message' => 'Invalid content type'], 400);
         }
 
-        return response()->json(['message' => 'Content added successfully', 'content_id' => $content->id], 201);
+        return response()->json(['message' => 'Content added successfully', 'content' => $content], 201);
     }
+
+    public function getCourses(Request $request)
+    {
+        $teacherId = Auth::user()->id;
+        $courses = Course::where('teacher_id', $teacherId)->get();
+        return response()->json(['courses' => $courses]);
+    }
+
+
 }
