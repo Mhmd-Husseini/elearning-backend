@@ -55,18 +55,10 @@ class TeacherController extends Controller
 
     public function getCourseDetails(Request $request, $courseId)
     {
-        $course = Course::with([
-            'students.parent',
-            'quizes',
-            'assignments',
-            'lectures',
-            'materials'
-        ])->find($courseId);
-
+        $course = Course::with(['students.parent', 'quizes','assignments','lectures', 'materials' ])->find($courseId);
         if (!$course) {
             return response()->json(['message' => 'Course not found'], 404);
         }
-
         return response()->json(['course' => $course]);
     }
 }

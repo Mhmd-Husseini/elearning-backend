@@ -32,22 +32,22 @@ class Course extends Model
 
     public function quizes()
     {
-        return $this->hasMany(Quiz::class);
+        return $this->hasMany(Quiz::class)->orderBy('created_at', 'desc');;
     }
 
     public function assignments()
     {
-        return $this->hasMany(Assignment::class);
+        return $this->hasMany(Assignment::class)->orderBy('created_at', 'desc');;
     }
 
     public function lectures()
     {
-        return $this->hasMany(Lecture::class);
+        return $this->hasMany(Lecture::class)->orderBy('created_at', 'desc');;
     }
 
     public function materials()
     {
-        return $this->hasMany(Material::class);
+        return $this->hasMany(Material::class)->orderBy('created_at', 'desc');;
     }
 }
 
