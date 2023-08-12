@@ -10,6 +10,7 @@ use App\Http\Controllers\TeacherController;
     Route::post("/register", [AuthController::class, "register"]);
 
     Route::group(["middleware" => "auth:api"], function(){
+        
         Route::group(["middleware" => "auth.admin", 'prefix' => 'admin'], function(){
             Route::group(['prefix' => 'users'], function(){
                 Route::post('/addUser', [AdminController::class, "addUser"]);
