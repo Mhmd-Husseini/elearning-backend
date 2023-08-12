@@ -9,7 +9,7 @@ use App\Models\User_type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Exception;
-
+use Illuminate\Support\Facades\DB;
 use function Laravel\Prompts\password;
 
 class AdminController extends Controller
@@ -180,6 +180,36 @@ class AdminController extends Controller
 
             $course->delete();
             return $this->customResponse($course, 'Deleted Successfully');
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
+
+    //Reporting and Analytics
+    public function getAnalytics(){
+        try{
+            $teachersNum = User::where('user_type_id', 2)->count();
+            $studentsNum = User::where('user_type_id', 3)->count();
+            $parentNum = User::where('user_type_id', 4)->count();
+
+            $courseCount = Course::count();
+            $mathCourses = Course::where('category_id', 1)->count();
+            $scienceCourses = Course::where('category_id', 2)->count();
+            $chemistry = Course::where('category_id', 3)->count();
+            $english = Course::where('category_id', 4)->count();
+
+            $result = [
+                'teachersNum' => $teachersNum,
+                'studentsNum' => $studentsNum,
+                'parentNum' => $parentNum,
+                'courseCount' => $courseCount,
+                'mathCourses' => $mathCourses,
+                'scienceCourses' => $scienceCourses,
+                'chemistry' => $chemistry,
+                'english' => $english,
+            ];
+            
+            return $this->customResponse($result);
         }catch(Exception $e){
             return self::customResponse($e->getMessage(),'error',500);
         }

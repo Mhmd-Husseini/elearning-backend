@@ -23,12 +23,14 @@ use App\Http\Controllers\AdminController;
             Route::group(['prefix' => 'courses'], function(){
                 Route::post('/addCourse', [AdminController::class, "addCourse"]);
                 Route::post('/updateCourse', [AdminController::class, "updateCourse"]);
-
                 Route::get('/getCourse/{course}', [AdminController::class, "getCourseById"]);
                 Route::get('/all', [AdminController::class, "getCourses"]);
                 Route::get('/getCategories', [AdminController::class, "getCourseCategory"]);
-
                 Route::delete('/deleteCourse/{id}', [AdminController::class, "deleteCourse"]);
+            });
+
+            Route::group(['prefix' => 'dashboard'], function(){
+                Route::get('/analytics', [AdminController::class, "getAnalytics"]);
             });
 
         });
