@@ -205,8 +205,8 @@ class AdminController extends Controller
                 'courseCount' => $courseCount,
                 'mathCourses' => $mathCourses,
                 'scienceCourses' => $scienceCourses,
-                'chemistry' => $chemistry,
-                'english' => $english,
+                'chemistryCourses' => $chemistry,
+                'englishCourses' => $english,
             ];
             
             return $this->customResponse($result);
