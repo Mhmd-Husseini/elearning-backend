@@ -18,6 +18,7 @@ class TeacherController extends Controller
             'type' => 'required|in:quiz,assignment,lecture,material',
             'title' => 'required|string',
             'description' => 'required|string',
+            'course_id' => 'required|integer',
         ]);
 
         $contentType = $request->input('type');
@@ -61,5 +62,8 @@ class TeacherController extends Controller
         }
         return response()->json(['course' => $course]);
     }
+
+    
 }
+
 

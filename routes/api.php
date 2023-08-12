@@ -15,7 +15,6 @@ use App\Http\Controllers\TeacherController;
     
         Route::group(["middleware" => "auth.teacher"], function(){
             Route::post("/teacher/post", [TeacherController::class, "post"]);
-
             Route::get('/teacher/courses', [TeacherController::class, 'getCourses']);
             Route::get('/teacher/courses/{courseId}', [TeacherController::class, 'getCourseDetails']);
         });
