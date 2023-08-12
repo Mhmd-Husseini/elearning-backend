@@ -21,7 +21,6 @@ class Course extends Model
     ];
 
     public function category(){
-<<<<<<< HEAD
     return $this->belongsTo(Category::class);
     }
 
@@ -50,9 +49,7 @@ class Course extends Model
     public function materials()
     {
         return $this->hasMany(Material::class)->orderBy('created_at', 'desc');;
-=======
         return $this->belongsTo(Category::class,'category_id');
->>>>>>> origin/Admin
     }
 }
 
