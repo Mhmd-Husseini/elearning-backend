@@ -49,6 +49,7 @@ use App\Http\Controllers\TeacherController;
             Route::get('/children', [ParentController::class, 'getChildren']);
             Route::get('/child/courses/{id}', [ParentController::class, 'getChildCourses']);
             Route::get('child/assignments/{id}', [ParentController::class, 'getAssignedTasks']);
+            //Route::post('/child/report', [ParentController::class, "getStudentInfo"]);
         });
     });
     
