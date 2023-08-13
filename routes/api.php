@@ -26,6 +26,7 @@ use App\Http\Controllers\StudentController;
         Route::group(["middleware" => "auth.student"], function(){
             Route::get('courses', [StudentController::class, "getCourses"]);
             Route::get('enrolled-courses', [StudentController::class, "getEnrolledCourses"]);
+            Route::post('enroll-course/{course_id}', [StudentController::class, "enrollCourse"]);
 
         });
     
