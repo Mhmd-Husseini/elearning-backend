@@ -32,6 +32,11 @@ class Course extends Model
             ->where('users.user_type_id', '=', 3);
     }
 
+    public function enrolledStudents()
+    {
+        return $this->belongsToMany(User::class, 'enrollment_courses', 'course_id', 'user_id');
+    }
+
     public function quizes()
     {
         return $this->hasMany(Quiz::class)->orderBy('created_at', 'desc');;
@@ -53,9 +58,11 @@ class Course extends Model
         return $this->belongsTo(Category::class,'category_id');
     }
 
-    public function users(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, )->withTimestamps();;
+    public function enrollmentCourses() {
+        return $this->hasMany(Enrollment_course::class);}
+
+        public function users(): BelongsToMany{
+        return $this->belongsToMany(User::class )->withTimestamps();;
     }
 }
 

@@ -6,11 +6,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\StudentController;
 
     Route::post("/login", [AuthController::class, "login"]);
     Route::post("/register", [AuthController::class, "register"]);
 
     Route::group(["middleware" => "auth:api"], function(){
+        
         Route::group(["middleware" => "auth.admin", 'prefix' => 'admin'], function(){
             Route::group(['prefix' => 'users'], function(){
                 Route::post('/addUser', [AdminController::class, "addUser"]);
@@ -19,7 +21,6 @@ use App\Http\Controllers\TeacherController;
                 Route::get('/getUsers/{user_type}', [AdminController::class, "getUsers"]);
                 Route::delete('/deleteUser/{id}', [AdminController::class, "deleteUser"]);
             });
-
             Route::group(['prefix' => 'courses'], function(){
                 Route::post('/addCourse', [AdminController::class, "addCourse"]);
                 Route::post('/updateCourse', [AdminController::class, "updateCourse"]);
@@ -28,20 +29,27 @@ use App\Http\Controllers\TeacherController;
                 Route::get('/getCategories', [AdminController::class, "getCourseCategory"]);
                 Route::delete('/deleteCourse/{id}', [AdminController::class, "deleteCourse"]);
             });
-
             Route::group(['prefix' => 'dashboard'], function(){
                 Route::get('/analytics', [AdminController::class, "getAnalytics"]);
             });
 
+            
         });
     
         Route::group(["middleware" => "auth.teacher"], function(){
+
             Route::post("/teacher/post", [TeacherController::class, "post"]);
             Route::get('/teacher/courses', [TeacherController::class, 'getCourses']);
             Route::get('/teacher/courses/{courseId}', [TeacherController::class, 'getCourseDetails']);
+
         });
 
         Route::group(["middleware" => "auth.student"], function(){
+            Route::get('courses/{course_id?}', [StudentController::class, "getCourses"]);
+            Route::get('categories', [StudentController::class, "getCategories"]);
+            Route::get('enrolled-courses', [StudentController::class, "getEnrolledCourses"]);
+            Route::post('enroll-course/{course_id}', [StudentController::class, "enrollCourse"]);
+            Route::post('upload', [FileController::class, "upload"]);
 
         });
     

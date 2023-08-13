@@ -24,13 +24,13 @@ class AdminController extends Controller
                 'password' => ['required','string','min:6'],
                 'user_type_id' => ['required','exists:user_types,id']
             ];
-
-            if ($request->user_type_id == 3) {
+    
+            if ($request->user_type_id == 3 && $request->has('parent_id')) {
                 $rules['parent_id'] = ['required', 'numeric', 'exists:users,id'];
             }
-
+    
             $validatedData = $request->validate($rules);
-
+    
             $user = User::create([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
@@ -38,12 +38,13 @@ class AdminController extends Controller
                 'user_type_id' => $validatedData['user_type_id'],
                 'parent_id' => $validatedData['parent_id'] ?? null,
             ]);
-
+    
             return $this->customResponse($user, 'User Created Successfully');
         } catch (Exception $e) {
             return self::customResponse($e->getMessage(),'error',500);
         }
     }
+    
 
     public function deleteUser($id){
         try{
@@ -89,25 +90,29 @@ class AdminController extends Controller
         }
     }
 
-    public function updateUser(Request $request_info){
-        try{
+    public function updateUser(Request $request_info)
+    {
+        try {
             $user = User::find($request_info->id);
             $user->name = $request_info->name;
             $user->email = $request_info->email;
-            $user->password = $request_info->password;
-            $user->user_type_id = $request_info->user_type_id;
-
-            if($request_info->user_type_id == 3 ){
+    
+            if ($request_info->has('password')) {
+                $user->password = $request_info->password;
+            }
+        
+            if ($request_info->has('parent_id')) {
                 $user->parent_id = $request_info->parent_id;
             }
-
+    
             $user->save();
-
+    
             return $this->customResponse($user, 'Updated Successfully');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return self::customResponse($e->getMessage(),'error',500);
         }
     }
+    
 
     //Course Functions
     public function addCourse(Request $request_info){
@@ -144,14 +149,19 @@ class AdminController extends Controller
         }
     }
 
-    public function getCourses(){
-        try{
-            $courses = Course::with('category')->get();
+    public function getCourses()
+    {
+        try {
+            $courses = Course::with('category')
+                ->withCount('enrolledStudents')
+                ->get();
+    
             return $this->customResponse($courses);
-        }catch(Exception $e){
-            return self::customResponse($e->getMessage(),'error',500);
+        } catch (Exception $e) {
+            return self::customResponse($e->getMessage(), 'error', 500);
         }
     }
+    
 
     public function getCourseById(Course $course){
         try{
