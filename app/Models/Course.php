@@ -56,5 +56,9 @@ class Course extends Model
         return $this->hasMany(Material::class)->orderBy('created_at', 'desc');;
         return $this->belongsTo(Category::class,'category_id');
     }
+
+    public function enrollmentCourses() {
+        return $this->hasMany(Enrollment_course::class);
+    }
 }
 

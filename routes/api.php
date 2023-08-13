@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\StudentController;
 
     Route::post("/login", [AuthController::class, "login"]);
     Route::post("/register", [AuthController::class, "register"]);
@@ -31,15 +32,23 @@ use App\Http\Controllers\TeacherController;
                 Route::get('/analytics', [AdminController::class, "getAnalytics"]);
             });
 
+            
         });
     
         Route::group(["middleware" => "auth.teacher"], function(){
+
             Route::post("/teacher/post", [TeacherController::class, "post"]);
             Route::get('/teacher/courses', [TeacherController::class, 'getCourses']);
             Route::get('/teacher/courses/{courseId}', [TeacherController::class, 'getCourseDetails']);
+
         });
 
         Route::group(["middleware" => "auth.student"], function(){
+            Route::get('courses/{course_id?}', [StudentController::class, "getCourses"]);
+            Route::get('categories', [StudentController::class, "getCategories"]);
+            Route::get('enrolled-courses', [StudentController::class, "getEnrolledCourses"]);
+            Route::post('enroll-course/{course_id}', [StudentController::class, "enrollCourse"]);
+            Route::post('upload', [FileController::class, "upload"]);
 
         });
     
