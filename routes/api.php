@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ParentController;
 use App\Http\Controllers\TeacherController;
 
     Route::post("/login", [AuthController::class, "login"]);
@@ -44,8 +45,8 @@ use App\Http\Controllers\TeacherController;
 
         });
     
-        Route::group(["middleware" => "auth.parent"], function(){
-
+        Route::group(["middleware" => "auth.parent", 'prefix' => 'parent'], function(){
+            Route::get('/children', [ParentController::class, 'getChildren']);
         });
     });
     
