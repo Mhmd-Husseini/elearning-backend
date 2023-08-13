@@ -149,14 +149,19 @@ class AdminController extends Controller
         }
     }
 
-    public function getCourses(){
-        try{
-            $courses = Course::with('category')->get();
+    public function getCourses()
+    {
+        try {
+            $courses = Course::with('category')
+                ->withCount('enrolledStudents')
+                ->get();
+    
             return $this->customResponse($courses);
-        }catch(Exception $e){
-            return self::customResponse($e->getMessage(),'error',500);
+        } catch (Exception $e) {
+            return self::customResponse($e->getMessage(), 'error', 500);
         }
     }
+    
 
     public function getCourseById(Course $course){
         try{
