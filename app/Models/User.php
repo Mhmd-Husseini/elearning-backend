@@ -38,12 +38,10 @@ class User extends Authenticatable implements JWTSubject{
         return [];
     }
 
-<<<<<<< HEAD
     public function parent(){
     return $this->belongsTo(User::class, 'parent_id');
     }
 
-=======
     public function students(){
         return $this->hasMany(User::class, 'parent_id');
     }
@@ -51,5 +49,4 @@ class User extends Authenticatable implements JWTSubject{
     public function type(){
         return $this->belongsTo(User_type::class,'user_type_id');
     }
->>>>>>> origin/Admin
 }
