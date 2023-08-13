@@ -9,6 +9,7 @@ use App\Models\Assignment;
 use App\Models\Lecture;
 use App\Models\Material;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Course extends Model
 {
@@ -59,10 +60,15 @@ class Course extends Model
     }
 
     public function enrollmentCourses() {
-        return $this->hasMany(Enrollment_course::class);}
+        return $this->hasMany(Enrollment_course::class);
+    }
 
-        public function users(): BelongsToMany{
-        return $this->belongsToMany(User::class )->withTimestamps();;
+    public function users(): BelongsToMany{
+        return $this->belongsToMany(User::class )->withTimestamps();
+    }
+
+    public function categories(): BelongsTo{
+        return $this->belongsTo(Category::class);
     }
 }
 
