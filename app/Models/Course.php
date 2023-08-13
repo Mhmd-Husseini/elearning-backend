@@ -15,6 +15,7 @@ class Course extends Model
     protected $fillable = [
         'teacher_id',
         'name',
+        'seats',
         'description',
         'category_id',
     ];
@@ -28,6 +29,11 @@ class Course extends Model
     {
         return $this->belongsToMany(User::class, 'enrollment_courses', 'course_id', 'user_id')
             ->where('users.user_type_id', '=', 3);
+    }
+
+    public function enrolledStudents()
+    {
+        return $this->belongsToMany(User::class, 'enrollment_courses', 'course_id', 'user_id');
     }
 
     public function quizes()
@@ -48,6 +54,7 @@ class Course extends Model
     public function materials()
     {
         return $this->hasMany(Material::class)->orderBy('created_at', 'desc');;
+        return $this->belongsTo(Category::class,'category_id');
     }
 }
 

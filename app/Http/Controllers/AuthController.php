@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\User_type;
 
 
-class AuthController extends Controller
+class AuthController extends Controller 
 {
 
     public function __construct()
