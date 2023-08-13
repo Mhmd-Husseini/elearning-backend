@@ -8,6 +8,7 @@ use App\Models\Quiz;
 use App\Models\Assignment;
 use App\Models\Lecture;
 use App\Models\Material;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Course extends Model
 {
@@ -50,6 +51,11 @@ class Course extends Model
     {
         return $this->hasMany(Material::class)->orderBy('created_at', 'desc');;
         return $this->belongsTo(Category::class,'category_id');
+    }
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, )->withTimestamps();;
     }
 }
 

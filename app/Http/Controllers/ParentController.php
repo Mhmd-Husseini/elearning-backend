@@ -15,17 +15,20 @@ class ParentController extends Controller
     {
         $parent_id = Auth::user()->id;
         $children = User::where("parent_id", $parent_id)->get();
-        if ($children) {
-            return response()->json([
-                "status" => "success",
-                "data" => $children
-            ]);
-        } else {
-            return response()->json([
-                "status" => "failed",
-                "data" => "no children"
-            ]);
-        }
+        $responseData = $children
+            ? ["status" => "success", "data" => $children]
+            : ["status" => "failed", "data" => "no children"];
+        return response()->json($responseData);
+    }
+
+
+    function getChildCourses($child_id)
+    {
+        $courses = User::find($child_id)->courses()->get();
+        $responseData = $courses
+            ? ["status" => "success", "data" => $courses]
+            : ["status" => "failed", "data" => "no courses"];
+        return response()->json($responseData);
     }
 
 }

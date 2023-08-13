@@ -47,6 +47,7 @@ use App\Http\Controllers\TeacherController;
     
         Route::group(["middleware" => "auth.parent", 'prefix' => 'parent'], function(){
             Route::get('/children', [ParentController::class, 'getChildren']);
+            Route::get('/child/courses/{id}', [ParentController::class, 'getChildCourses']);
         });
     });
     
