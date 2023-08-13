@@ -49,5 +49,9 @@ class Course extends Model
     {
         return $this->hasMany(Material::class)->orderBy('created_at', 'desc');;
     }
+
+    public function enrollmentCourses() {
+        return $this->hasMany(Enrollment_course::class);
+    }
 }
 
