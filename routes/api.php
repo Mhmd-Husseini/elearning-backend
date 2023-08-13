@@ -19,7 +19,6 @@ use App\Http\Controllers\TeacherController;
                 Route::get('/getUsers/{user_type}', [AdminController::class, "getUsers"]);
                 Route::delete('/deleteUser/{id}', [AdminController::class, "deleteUser"]);
             });
-
             Route::group(['prefix' => 'courses'], function(){
                 Route::post('/addCourse', [AdminController::class, "addCourse"]);
                 Route::post('/updateCourse', [AdminController::class, "updateCourse"]);
@@ -28,7 +27,6 @@ use App\Http\Controllers\TeacherController;
                 Route::get('/getCategories', [AdminController::class, "getCourseCategory"]);
                 Route::delete('/deleteCourse/{id}', [AdminController::class, "deleteCourse"]);
             });
-
             Route::group(['prefix' => 'dashboard'], function(){
                 Route::get('/analytics', [AdminController::class, "getAnalytics"]);
             });
