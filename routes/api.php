@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ParentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 
@@ -52,8 +53,10 @@ use App\Http\Controllers\StudentController;
 
         });
     
-        Route::group(["middleware" => "auth.parent"], function(){
-
+        Route::group(["middleware" => "auth.parent", 'prefix' => 'parent'], function(){
+            Route::get('/children', [ParentController::class, 'getChildren']);
+            Route::get('/child/courses/{id}', [ParentController::class, 'getChildCourses']);
+            Route::get('child/assignments/{id}', [ParentController::class, 'getAssignedTasks']);
         });
     });
     

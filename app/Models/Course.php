@@ -8,6 +8,7 @@ use App\Models\Quiz;
 use App\Models\Assignment;
 use App\Models\Lecture;
 use App\Models\Material;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Course extends Model
 {
@@ -58,7 +59,10 @@ class Course extends Model
     }
 
     public function enrollmentCourses() {
-        return $this->hasMany(Enrollment_course::class);
+        return $this->hasMany(Enrollment_course::class);}
+
+        public function users(): BelongsToMany{
+        return $this->belongsToMany(User::class )->withTimestamps();;
     }
 }
 
