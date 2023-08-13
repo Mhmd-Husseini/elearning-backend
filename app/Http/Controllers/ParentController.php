@@ -31,4 +31,13 @@ class ParentController extends Controller
         return response()->json($responseData);
     }
 
+    public function getAssignedTasks($course_id)
+    {
+        $course = Course::with(['students.parent', 'quizes','assignments','lectures', 'materials' ])->find($course_id);
+        if (!$course) {
+            return response()->json(['message' => 'Course not found'], 404);
+        }
+        return response()->json(['course' => $course]);
+    }
+
 }
