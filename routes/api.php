@@ -49,6 +49,7 @@ use App\Http\Controllers\StudentController;
             Route::get('enrolled-courses', [StudentController::class, "getEnrolledCourses"]);
             Route::post('enroll-course/{course_id}', [StudentController::class, "enrollCourse"]);
             Route::post('upload', [FileController::class, "upload"]);
+            Route::get('getTasks/{student_id}', [StudentController::class, 'getTasks']);
 
         });
     
