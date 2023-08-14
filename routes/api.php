@@ -48,9 +48,9 @@ use App\Http\Controllers\StudentController;
             Route::get('courses/{course_id?}', [StudentController::class, "getCourses"]);
             Route::get('enrolled-courses', [StudentController::class, "getEnrolledCourses"]);
             Route::post('enroll-course/{course_id}', [StudentController::class, "enrollCourse"]);
-            Route::post('upload', [FileController::class, "upload"]);
             Route::get('getTasks/{student_id}', [StudentController::class, 'getTasks']);
-
+            Route::get('getOneTask/{type}/{id}', [StudentController::class, 'getOneTask']);
+            Route::post('upload', [FileController::class, "upload"]);
         });
     
         Route::group(["middleware" => "auth.parent", 'prefix' => 'parent'], function(){

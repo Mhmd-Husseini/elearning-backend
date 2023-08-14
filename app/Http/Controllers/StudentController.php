@@ -22,9 +22,12 @@ class StudentController extends Controller
 
         if ($course_id != null) {
             $course = Course::find($course_id);
+        if (!Enrollment_course::isEnrolled($course_id)) {
             return response()->json([
-                'course' =>  $course
+                'course' =>  $course,
+                'status' => 'not Enrolled'
             ]);
+        }
         } else {
 
             $courses = Course::all();
@@ -105,5 +108,27 @@ class StudentController extends Controller
             'status' => 'Enrolled',
             'tasks' => $courseContent
         ]);
+    }
+
+    function getOneTask(Request $request, $type, $course_id){
+        switch ($type) {
+            case 'quiz':
+                $task = Quiz::find($course_id);
+                break;
+            case 'assignment':
+                $task = Assignment::find($course_id);
+                break;
+            case 'material':
+                $task = Material::find($course_id);
+                break;
+            case 'lecture':
+                $task = Lecture::find($course_id);
+                break;
+            default:
+                return response()->json(['message' => 'Invalid type'], 400);
+        }
+        return response()->json([
+            'task' => $task
+            ]);
     }
 }
