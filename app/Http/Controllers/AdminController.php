@@ -195,19 +195,38 @@ class AdminController extends Controller
         }
     }
 
-    //Reporting and Analytics
     public function getAnalytics(){
-        try{
+        try {
             $teachersNum = User::where('user_type_id', 2)->count();
             $studentsNum = User::where('user_type_id', 3)->count();
             $parentNum = User::where('user_type_id', 4)->count();
-
+    
             $courseCount = Course::count();
             $mathCourses = Course::where('category_id', 1)->count();
             $scienceCourses = Course::where('category_id', 2)->count();
-            $chemistry = Course::where('category_id', 3)->count();
-            $english = Course::where('category_id', 4)->count();
+            $chemistryCourses = Course::where('category_id', 3)->count();
+            $englishCourses = Course::where('category_id', 4)->count();
+    
+            $teachersByDate = User::where('user_type_id', 2)
+            ->selectRaw('DATE(created_at) as date, COUNT(id) as count')
+            ->groupBy('date')
+            ->get();
 
+        $studentsByDate = User::where('user_type_id', 3)
+            ->selectRaw('DATE(created_at) as date, COUNT(id) as count')
+            ->groupBy('date')
+            ->get();
+
+        $parentsByDate = User::where('user_type_id', 4)
+            ->selectRaw('DATE(created_at) as date, COUNT(id) as count')
+            ->groupBy('date')
+            ->get();
+
+        // Group course count by created_at date
+        $coursesByDate = Course::selectRaw('DATE(created_at) as date, COUNT(id) as count')
+            ->groupBy('date')
+            ->get();
+    
             $result = [
                 'teachersNum' => $teachersNum,
                 'studentsNum' => $studentsNum,
@@ -215,15 +234,20 @@ class AdminController extends Controller
                 'courseCount' => $courseCount,
                 'mathCourses' => $mathCourses,
                 'scienceCourses' => $scienceCourses,
-                'chemistryCourses' => $chemistry,
-                'englishCourses' => $english,
+                'chemistryCourses' => $chemistryCourses,
+                'englishCourses' => $englishCourses,
+                'teachersByDate' => $teachersByDate,
+                'studentsByDate' => $studentsByDate,
+                'parentsByDate' => $parentsByDate,
+                'coursesByDate' => $coursesByDate,            
             ];
-            
+    
             return $this->customResponse($result);
-        }catch(Exception $e){
-            return self::customResponse($e->getMessage(),'error',500);
+        } catch(Exception $e) {
+            return $this->customResponse($e->getMessage(), 'error', 500);
         }
     }
+    
 
     function customResponse($data, $status = 'success', $code = 200){
         $response = ['status' => $status,'data' => $data];
