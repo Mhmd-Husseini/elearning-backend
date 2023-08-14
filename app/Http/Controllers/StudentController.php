@@ -22,16 +22,20 @@ class StudentController extends Controller
 
         if ($course_id != null) {
             $course = Course::find($course_id);
-        if (!Enrollment_course::isEnrolled($course_id)) {
-            return response()->json([
-                'course' =>  $course,
-                'status' => 'not Enrolled'
-            ]);
-        }
+            if (!Enrollment_course::isEnrolled($course_id)) {
+                return response()->json([
+                    'course' =>  $course,
+                    'status' => 'not Enrolled'
+                ]);
+            }
         } else {
-
             $courses = Course::all();
             $categories = Category::pluck('category');
+            foreach ($courses as $course) {
+                $teacher_id = $course->teacher_id;
+                $teacher_name = User::find($teacher_id);
+                $course->teacher_id = $teacher_name->name;
+            }
             return response()->json([
                 'courses' => $courses,
                 'categories' => $categories
@@ -110,7 +114,8 @@ class StudentController extends Controller
         ]);
     }
 
-    function getOneTask(Request $request, $type, $course_id){
+    function getOneTask(Request $request, $type, $course_id)
+    {
         switch ($type) {
             case 'quiz':
                 $task = Quiz::find($course_id);
@@ -129,6 +134,17 @@ class StudentController extends Controller
         }
         return response()->json([
             'task' => $task
-            ]);
+        ]);
+    }
+
+    function getClassmates (Request $request, $course_id){
+
+        $user = Auth::user();
+
+        $classmates = Course::find($course_id)->students()->where('users.id', '<>', $user->id)->get();
+        $responseData = $classmates
+            ? ["status" => "success", "data" => $classmates]
+            : ["status" => "failed", "data" => "no classmates"];
+        return response()->json($responseData);
     }
 }
