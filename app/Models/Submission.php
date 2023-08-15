@@ -17,4 +17,9 @@ class Submission extends Model
         'grade', 
         'file',
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(User::class, 'student_id');
+    }
 }

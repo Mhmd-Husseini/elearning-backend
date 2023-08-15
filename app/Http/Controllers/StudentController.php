@@ -120,7 +120,6 @@ class StudentController extends Controller
                     'grade' => null,
                     'file' => $filePath,
                     'correctedby_id' => null,
-
                 ]);
         
                 return response()->json(['message' => 'File submitted successfully']);

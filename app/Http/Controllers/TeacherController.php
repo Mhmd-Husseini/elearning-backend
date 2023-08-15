@@ -106,15 +106,20 @@ class TeacherController extends Controller
     public function showSubmissions($type, $id)
     {
         if ($type === 'quiz') {
-            $submissions = Submission::where('quiz_id', $id)->get();
+            $submissions = Submission::with('student')
+                ->where('quiz_id', $id)
+                ->get();
         } elseif ($type === 'assignment') {
-            $submissions = Submission::where('assignment_id', $id)->get();
+            $submissions = Submission::with('student')
+                ->where('assignment_id', $id)
+                ->get();
         } else {
             return response()->json(['error' => 'Invalid submission type'], 400);
         }
-
+    
         return response()->json(['submissions' => $submissions]);
     }
+    
 
 }
 
