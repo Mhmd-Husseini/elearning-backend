@@ -12,6 +12,7 @@ use App\Models\Material;
 use App\Models\Assignment;
 use App\Models\User;
 use App\Models\Quiz;
+use App\Models\Submission;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -158,7 +159,34 @@ class StudentController extends Controller
         return response()->json($responseData);
     }
 
-    function sendMessage(Request $request, $receiver_id)
-    {
-    }
+    public function submitFile(Request $request)
+        {
+            $file = $request->file('file');
+            $studentId = auth()->user()->id; // Assuming you have authentication in place
+            $courseId = $request->input('course_id');
+            $quizId = $request->input('quiz_id');
+            $assignmentId = $request->input('assignment_id');
+        
+            // Ensure the file was uploaded successfully
+            if ($file->isValid()) {
+                // Store the file and get its path or URL
+                $filePath = $file->store('submissions', 'public'); // Store in the "public" disk
+        
+                // Create a new submission record in the database
+                Submission::create([
+                    'student_id' => $studentId,
+                    'course_id' => $courseId,
+                    'quiz_id' => $quizId,
+                    'assignment_id' => $assignmentId,
+                    'grade' => null,
+                    'file' => $filePath,
+                    'correctedby_id' => null,
+
+                ]);
+        
+                return response()->json(['message' => 'File submitted successfully']);
+            }
+        
+            return response()->json(['message' => 'File upload failed'], 400);
+        }
 }
