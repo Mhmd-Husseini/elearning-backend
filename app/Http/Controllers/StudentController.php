@@ -21,30 +21,29 @@ class StudentController extends Controller
     {
         $user = Auth::user();
         $student_id = $user->id;
-        if ($course_id != null) {
-            $course = Course::find($course_id);
-            if (!Enrollment_course::isEnrolled($course_id)) {
-                return response()->json([
-                    'course' =>  $course,
-                    'status' => 'not Enrolled'
-                ]);
-            }
-        } else {
-            $courses = Course::all();
-            $categories = Category::pluck('category');
-            foreach ($courses as $course) {
-                $teacher_id = $course->teacher_id;
-                $category_id = $course->category_id;
-                $teacher_name = User::find($teacher_id);
-                $category_name = Category::find($category_id);
-                $course->teacher_id = $teacher_name->name;
-                $course->category_id = $category_name->category;
-            }
-            return response()->json([
-                'courses' => $courses,
-                'categories' => $categories
-            ]);
+
+        $courses = Course::all();
+        $categories = Category::pluck('category');
+        foreach ($courses as $course) {
+            $teacher_id = $course->teacher_id;
+            $category_id = $course->category_id;
+            $teacher_name = User::find($teacher_id);
+            $category_name = Category::find($category_id);
+            $course->teacher_id = $teacher_name->name;
+            $course->category_id = $category_name->category;
+            $isEnrolled = Enrollment_course::where('course_id', $course->id)
+                ->where('user_id', $student_id)
+                ->exists();
+
+            $course_info[] = [
+                'course' => $course,
+                'isEnrolled' => $isEnrolled,
+            ];
         }
+        return response()->json([
+            'courses' => $course_info,
+            'categories' => $categories
+        ]);
     }
 
     public function getEnrolledCourses()
@@ -150,11 +149,16 @@ class StudentController extends Controller
         $teacher_id = Course::find($course_id)->teacher_id;
         $teacher = User::find($teacher_id);
         $responseData = $classmates
-            ? ["status" => "success",
-            'teacher' => $teacher,
-             "data" => $classmates]
+            ? [
+                "status" => "success",
+                'teacher' => $teacher,
+                "data" => $classmates
+            ]
             : ["status" => "failed", "data" => "no classmates"];
         return response()->json($responseData);
     }
 
+    function sendMessage(Request $request, $receiver_id)
+    {
+    }
 }
