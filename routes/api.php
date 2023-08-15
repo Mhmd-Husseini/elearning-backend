@@ -57,6 +57,7 @@ use App\Http\Controllers\BackupController;
             Route::get('enrolled-courses', [StudentController::class, "getEnrolledCourses"]);
             Route::post('enroll-course/{course_id}', [StudentController::class, "enrollCourse"]);
             Route::post('upload', [FileController::class, "upload"]);
+            Route::post('/submit', [StudentController::class, "submitFile"]);
 
         });
     
@@ -67,4 +68,5 @@ use App\Http\Controllers\BackupController;
         });
 
     });
+    
     
