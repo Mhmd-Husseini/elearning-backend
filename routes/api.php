@@ -55,9 +55,11 @@ use App\Http\Controllers\BackupController;
 
         Route::group(["middleware" => "auth.student"], function(){
             Route::get('courses/{course_id?}', [StudentController::class, "getCourses"]);
-            Route::get('categories', [StudentController::class, "getCategories"]);
             Route::get('enrolled-courses', [StudentController::class, "getEnrolledCourses"]);
             Route::post('enroll-course/{course_id}', [StudentController::class, "enrollCourse"]);
+            Route::get('getTasks/{student_id}', [StudentController::class, 'getTasks']);
+            Route::get('getOneTask/{type}/{id}', [StudentController::class, 'getOneTask']);
+            Route::get('classmates/{course_id}', [StudentController::class, 'getClassmates']);
             Route::post('upload', [FileController::class, "upload"]);
             Route::post('/submit', [StudentController::class, "submitFile"]);
         });
@@ -66,6 +68,7 @@ use App\Http\Controllers\BackupController;
             Route::get('/children', [ParentController::class, 'getChildren']);
             Route::get('/child/courses/{id}', [ParentController::class, 'getChildCourses']);
             Route::get('child/assignments/{id}', [ParentController::class, 'getAssignedTasks']);
+            //Route::post('/child/report', [ParentController::class, "getStudentInfo"]);
         });
 
     });

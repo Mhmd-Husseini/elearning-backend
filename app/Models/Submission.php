@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Assignment;
+use App\Models\Quiz;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Submission extends Model
 {
@@ -17,6 +20,16 @@ class Submission extends Model
         'grade', 
         'file',
     ];
+
+    public function assignment(): HasOne
+    {
+        return $this->hasMany(Assignment::class)->withTimestamps();
+    }
+
+    public function quiz(): HasOne
+    {
+        return $this->hasMany(Quiz::class)->withTimestamps();
+    }
 
     public function student()
     {
