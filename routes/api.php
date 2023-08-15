@@ -7,11 +7,15 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ChatController;
 
     Route::post("/login", [AuthController::class, "login"]);
     Route::post("/register", [AuthController::class, "register"]);
 
     Route::group(["middleware" => "auth:api"], function(){
+        
+    Route::get('/chat/{otherUserId}', [ChatController::class, 'getChatMessages']);
+    Route::post('/chat/{otherUserId}/send', [ChatController::class, 'sendChatMessage']);
         
         Route::group(["middleware" => "auth.admin", 'prefix' => 'admin'], function(){
             Route::group(['prefix' => 'users'], function(){
@@ -58,5 +62,6 @@ use App\Http\Controllers\StudentController;
             Route::get('/child/courses/{id}', [ParentController::class, 'getChildCourses']);
             Route::get('child/assignments/{id}', [ParentController::class, 'getAssignedTasks']);
         });
+
     });
     
