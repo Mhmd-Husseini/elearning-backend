@@ -10,6 +10,8 @@ use App\Models\Lecture;
 use App\Models\Material;
 use App\Models\Course;
 use App\Models\Attendance;
+use App\Models\Submission;
+
 
 class TeacherController extends Controller
 {
@@ -99,6 +101,20 @@ class TeacherController extends Controller
     
         return response()->json(['message' => 'Attendance marked successfully']);
     }    
+
+
+    public function showSubmissions($type, $id)
+    {
+        if ($type === 'quiz') {
+            $submissions = Submission::where('quiz_id', $id)->get();
+        } elseif ($type === 'assignment') {
+            $submissions = Submission::where('assignment_id', $id)->get();
+        } else {
+            return response()->json(['error' => 'Invalid submission type'], 400);
+        }
+
+        return response()->json(['submissions' => $submissions]);
+    }
 
 }
 

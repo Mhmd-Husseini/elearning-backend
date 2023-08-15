@@ -49,6 +49,7 @@ use App\Http\Controllers\BackupController;
             Route::get('/teacher/courses/{courseId}', [TeacherController::class, 'getCourseDetails']);
             Route::get('/teacher/courses/{courseId}/chatroom', [TeacherController::class, 'getStudentsAndParents']);
             Route::post('/teacher/courses/{courseId}/lecture/attendance', [TeacherController::class, 'markAttendance']);
+            Route::get('/submissions/{type}/{id}',  [TeacherController::class, 'showSubmissions']);
         });
 
         Route::group(["middleware" => "auth.student"], function(){

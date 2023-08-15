@@ -104,17 +104,14 @@ class StudentController extends Controller
         public function submitFile(Request $request)
         {
             $file = $request->file('file');
-            $studentId = auth()->user()->id; // Assuming you have authentication in place
+            $studentId = auth()->user()->id; 
             $courseId = $request->input('course_id');
             $quizId = $request->input('quiz_id');
             $assignmentId = $request->input('assignment_id');
         
-            // Ensure the file was uploaded successfully
             if ($file->isValid()) {
-                // Store the file and get its path or URL
-                $filePath = $file->store('submissions', 'public'); // Store in the "public" disk
+                $filePath = $file->store('submissions', 'public'); 
         
-                // Create a new submission record in the database
                 Submission::create([
                     'student_id' => $studentId,
                     'course_id' => $courseId,
