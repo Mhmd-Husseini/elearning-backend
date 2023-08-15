@@ -12,6 +12,9 @@ use App\Http\Controllers\StudentController;
     Route::post("/register", [AuthController::class, "register"]);
 
     Route::group(["middleware" => "auth:api"], function(){
+
+    Route::get('/chat/{otherUserId}', [ChatController::class, 'getChatMessages']);
+    Route::post('/chat/{otherUserId}/send', [ChatController::class, 'sendChatMessage']);
         
         Route::group(["middleware" => "auth.admin", 'prefix' => 'admin'], function(){
             Route::group(['prefix' => 'users'], function(){
