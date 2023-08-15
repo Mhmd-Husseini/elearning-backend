@@ -63,7 +63,22 @@ class TeacherController extends Controller
         return response()->json(['course' => $course]);
     }
 
-    
+    public function getStudentsAndParents($courseId)
+    {
+        $course = Course::find($courseId);
+
+        if (!$course) {
+            return response()->json(['status' => 'failed', 'data' => 'Course not found'], 404);
+        }
+
+        $studentsData = $course->students()->with('parent')->get();
+        $response = [
+            'status' => 'success',
+            'data' => $studentsData,
+        ];
+
+        return response()->json($response);
+    }
 }
 
 
