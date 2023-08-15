@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
