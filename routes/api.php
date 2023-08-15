@@ -8,6 +8,7 @@ use App\Http\Controllers\ParentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\BackupController;
 
     Route::post("/login", [AuthController::class, "login"]);
     Route::post("/register", [AuthController::class, "register"]);
@@ -18,6 +19,7 @@ use App\Http\Controllers\ChatController;
     Route::post('/chat/{otherUserId}/send', [ChatController::class, 'sendChatMessage']);
         
         Route::group(["middleware" => "auth.admin", 'prefix' => 'admin'], function(){
+            Route::post('/backup', [BackupController::class, 'backup']);
             Route::group(['prefix' => 'users'], function(){
                 Route::post('/addUser', [AdminController::class, "addUser"]);
                 Route::post('/updateUser', [AdminController::class, "updateUser"]);
@@ -46,6 +48,7 @@ use App\Http\Controllers\ChatController;
             Route::get('/teacher/courses', [TeacherController::class, 'getCourses']);
             Route::get('/teacher/courses/{courseId}', [TeacherController::class, 'getCourseDetails']);
             Route::get('/teacher/courses/{courseId}/chatroom', [TeacherController::class, 'getStudentsAndParents']);
+            Route::post('/teacher/courses/{courseId}/lecture/attendance', [TeacherController::class, 'markAttendance']);
         });
 
         Route::group(["middleware" => "auth.student"], function(){
