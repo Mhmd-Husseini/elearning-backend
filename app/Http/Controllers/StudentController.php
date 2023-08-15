@@ -35,13 +35,13 @@ class StudentController extends Controller
                 ->where('user_id', $student_id)
                 ->exists();
 
-            $course_info[] = [
+            /*$course_info[] = [
                 'course' => $course,
                 'isEnrolled' => $isEnrolled,
-            ];
+            ];*/
         }
         return response()->json([
-            'courses' => $course_info,
+            'courses' => $courses,
             'categories' => $categories
         ]);
     }
