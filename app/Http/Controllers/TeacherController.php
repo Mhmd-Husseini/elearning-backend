@@ -120,7 +120,23 @@ class TeacherController extends Controller
         return response()->json(['submissions' => $submissions]);
     }
     
-
+    public function putGrade(Request $request)
+    {
+        $submissionId = $request->input('submission_id'); 
+        $submission = Submission::find($submissionId);
+    
+        if (!$submission) {
+            return response()->json(['error' => 'Submission not found'], 404);
+        }
+    
+        $grade = (int) $request->input('grade');     
+        $submission->update([
+            'correctedby_id' => auth()->user()->id,
+            'grade' => $grade,
+        ]);
+    
+        return response()->json(['message' => 'Submission updated successfully']);
+    }
 }
 
 

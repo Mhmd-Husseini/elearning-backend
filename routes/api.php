@@ -50,6 +50,7 @@ use App\Http\Controllers\BackupController;
             Route::get('/teacher/courses/{courseId}/chatroom', [TeacherController::class, 'getStudentsAndParents']);
             Route::post('/teacher/courses/{courseId}/lecture/attendance', [TeacherController::class, 'markAttendance']);
             Route::get('/submissions/{type}/{id}',  [TeacherController::class, 'showSubmissions']);
+            Route::post('/submissions/update', [TeacherController::class, 'putGrade']);
         });
 
         Route::group(["middleware" => "auth.student"], function(){
@@ -59,7 +60,6 @@ use App\Http\Controllers\BackupController;
             Route::post('enroll-course/{course_id}', [StudentController::class, "enrollCourse"]);
             Route::post('upload', [FileController::class, "upload"]);
             Route::post('/submit', [StudentController::class, "submitFile"]);
-
         });
     
         Route::group(["middleware" => "auth.parent", 'prefix' => 'parent'], function(){
