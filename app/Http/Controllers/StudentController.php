@@ -160,33 +160,33 @@ class StudentController extends Controller
     }
 
     public function submitFile(Request $request)
-        {
-            $file = $request->file('file');
-            $studentId = auth()->user()->id; // Assuming you have authentication in place
-            $courseId = $request->input('course_id');
-            $quizId = $request->input('quiz_id');
-            $assignmentId = $request->input('assignment_id');
-        
-            // Ensure the file was uploaded successfully
-            if ($file->isValid()) {
-                // Store the file and get its path or URL
-                $filePath = $file->store('submissions', 'public'); // Store in the "public" disk
-        
-                // Create a new submission record in the database
-                Submission::create([
-                    'student_id' => $studentId,
-                    'course_id' => $courseId,
-                    'quiz_id' => $quizId,
-                    'assignment_id' => $assignmentId,
-                    'grade' => null,
-                    'file' => $filePath,
-                    'correctedby_id' => null,
+    {
+        $file = $request->file('file');
+        $studentId = auth()->user()->id; // Assuming you have authentication in place
+        $courseId = $request->input('course_id');
+        $quizId = $request->input('quiz_id');
+        $assignmentId = $request->input('assignment_id');
 
-                ]);
-        
-                return response()->json(['message' => 'File submitted successfully']);
-            }
-        
-            return response()->json(['message' => 'File upload failed'], 400);
+        // Ensure the file was uploaded successfully
+        if ($file->isValid()) {
+            // Store the file and get its path or URL
+            $filePath = $file->store('submissions', 'public'); // Store in the "public" disk
+
+            // Create a new submission record in the database
+            Submission::create([
+                'student_id' => $studentId,
+                'course_id' => $courseId,
+                'quiz_id' => $quizId,
+                'assignment_id' => $assignmentId,
+                'grade' => null,
+                'file' => $filePath,
+                'correctedby_id' => null,
+
+            ]);
+
+            return response()->json(['message' => 'File submitted successfully']);
         }
+
+        return response()->json(['message' => 'File upload failed'], 400);
+    }
 }
