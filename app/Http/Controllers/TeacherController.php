@@ -9,6 +9,7 @@ use App\Models\Assignment;
 use App\Models\Lecture;
 use App\Models\Material;
 use App\Models\Course;
+use App\Models\Attendance;
 
 class TeacherController extends Controller
 {
@@ -79,6 +80,26 @@ class TeacherController extends Controller
 
         return response()->json($response);
     }
+
+
+    public function markAttendance(Request $request)
+    {
+        $attendanceData = $request->json()->all();
+    
+        foreach ($attendanceData as $attendanceItem) {
+            $userId = $attendanceItem['user_id'];
+            $lectureId = $attendanceItem['lecture_id'];
+            $attendance = $attendanceItem['attend'];
+            Attendance::create([
+                'user_id' => $userId,
+                'lecture_id' => $lectureId,
+                'attend' => $attendance,
+            ]);
+        }
+    
+        return response()->json(['message' => 'Attendance marked successfully']);
+    }    
+
 }
 
 
