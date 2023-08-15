@@ -19,7 +19,8 @@ class StudentController extends Controller
 {
     public function getCourses(Request $request, $course_id = null)
     {
-
+        $user = Auth::user();
+        $student_id = $user->id;
         if ($course_id != null) {
             $course = Course::find($course_id);
             if (!Enrollment_course::isEnrolled($course_id)) {
@@ -33,8 +34,11 @@ class StudentController extends Controller
             $categories = Category::pluck('category');
             foreach ($courses as $course) {
                 $teacher_id = $course->teacher_id;
+                $category_id = $course->category_id;
                 $teacher_name = User::find($teacher_id);
+                $category_name = Category::find($category_id);
                 $course->teacher_id = $teacher_name->name;
+                $course->category_id = $category_name->category;
             }
             return response()->json([
                 'courses' => $courses,
@@ -137,14 +141,20 @@ class StudentController extends Controller
         ]);
     }
 
-    function getClassmates (Request $request, $course_id){
+    function getClassmates(Request $request, $course_id)
+    {
 
         $user = Auth::user();
 
         $classmates = Course::find($course_id)->students()->where('users.id', '<>', $user->id)->get();
+        $teacher_id = Course::find($course_id)->teacher_id;
+        $teacher = User::find($teacher_id);
         $responseData = $classmates
-            ? ["status" => "success", "data" => $classmates]
+            ? ["status" => "success",
+            'teacher' => $teacher,
+             "data" => $classmates]
             : ["status" => "failed", "data" => "no classmates"];
         return response()->json($responseData);
     }
+
 }

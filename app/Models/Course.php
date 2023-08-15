@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
@@ -22,11 +24,12 @@ class Course extends Model
         'category_id',
     ];
 
-    public function category(){
-    return $this->belongsTo(Category::class);
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
-    
+
     public function students()
     {
         return $this->belongsToMany(User::class, 'enrollment_courses', 'course_id', 'user_id')
@@ -56,19 +59,33 @@ class Course extends Model
     public function materials()
     {
         return $this->hasMany(Material::class)->orderBy('created_at', 'desc');;
-        return $this->belongsTo(Category::class,'category_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function enrollmentCourses() {
+    public function enrollmentCourses()
+    {
         return $this->hasMany(Enrollment_course::class);
     }
 
-    public function users(): BelongsToMany{
+    public function users(): BelongsToMany
+    {
         return $this->belongsToMany(User::class, 'enrollment_courses')->withTimestamps();
     }
 
-    public function categories(): BelongsTo{
+    public function categories(): BelongsTo
+    {
         return $this->belongsTo(Category::class);
     }
-}
 
+    public function teacher(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'teacher_id');
+    }
+
+    public function studentss()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+
+}
