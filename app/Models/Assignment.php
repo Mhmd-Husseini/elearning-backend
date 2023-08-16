@@ -16,4 +16,8 @@ class Assignment extends Model
         'due', 
         'rubric',
     ];
+    
+    public function submissions() {
+        return $this->hasMany(Submission::class, 'assignment_id');
+    }
 }

@@ -13,4 +13,9 @@ class Lecture extends Model
         'title', 
         'description'
     ];
+    public function attendances(){
+
+        return $this->hasMany(Attendance::class);
+        
+    }
 }

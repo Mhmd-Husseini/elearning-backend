@@ -86,6 +86,14 @@ class Course extends Model
     {
         return $this->belongsToMany(User::class);
     }
+    public function attendances(){
+        return $this->hasManyThrough(Attendance::class, Lecture::class);
+    }
+
+    public function quizzes() {
+        return $this->hasMany(Quiz::class);
+    }
+    
 
 
 }

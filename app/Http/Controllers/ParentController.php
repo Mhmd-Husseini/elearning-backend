@@ -75,4 +75,47 @@ class ParentController extends Controller
             'attendance' => $attendance,
         ]);
     }*/
+    public function getCoursesLecturesAttandance($studentId) {
+        $student = User::find($studentId);
+
+        $enrolledCourses = $student->enrollmentCourses()->pluck('course_id');
+
+        $attendanceCounts = Course::whereIn('id', $enrolledCourses)
+        ->withCount(['attendances as attended_count' => function ($query) use ($studentId) {
+                $query->where('attend', 1)
+                      ->whereHas('student', function ($query) use ($studentId) {
+                          $query->where('id', $studentId);
+                      });
+            }])
+        
+        ->withCount(['lectures as total_lecture_count'])
+        ->with([
+            'teacher' => function ($query) {
+                $query->select('id', 'name');
+            },
+            
+            'assignments' => function ($query) use ($studentId) {
+                $query->select('*')
+                    ->addSelect(DB::raw("'assignment' as type"))
+                    ->with(['submissions' => function ($query) use ($studentId) {
+                        $query->select('assignment_id', 'student_id', 'grade')
+                            ->where('student_id', $studentId);
+                    }]);
+            },
+            'quizzes' => function ($query) use ($studentId) {
+                $query->select('*')
+                    ->addSelect(DB::raw("'quiz' as type"))
+                    ->with(['submissions' => function ($query) use ($studentId) {
+                        $query->select('id', 'quiz_id', 'student_id', 'score', 'created_at', 'updated_at')
+                            ->where('student_id', $studentId);
+                    }]);
+            },
+        ])
+        ->get();
+
+        return response()->json([
+            'data' => $attendanceCounts,
+        ]);
+        
+    }
 }

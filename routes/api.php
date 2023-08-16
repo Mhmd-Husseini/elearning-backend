@@ -68,7 +68,7 @@ use App\Http\Controllers\BackupController;
             Route::get('/children', [ParentController::class, 'getChildren']);
             Route::get('/child/courses/{id}', [ParentController::class, 'getChildCourses']);
             Route::get('child/assignments/{id}', [ParentController::class, 'getAssignedTasks']);
-            //Route::post('/child/report', [ParentController::class, "getStudentInfo"]);
+            Route::get('/child/report/{id}', [ParentController::class, "getCoursesLecturesAttandance"]);
         });
 
     });
