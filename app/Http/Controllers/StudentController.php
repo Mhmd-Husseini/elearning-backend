@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
-    public function getCourses(Request $request, $course_id = null)
+    public function getCourses()
     {
         $user = Auth::user();
         $student_id = $user->id;
@@ -30,7 +30,7 @@ class StudentController extends Controller
             $category_id = $course->category_id;
             $teacher_name = User::find($teacher_id);
             $category_name = Category::find($category_id);
-            $course->teacher_id = $teacher_name->name;
+            /*$course->teacher_id = $teacher_name->name;*/
             $course->category_id = $category_name->category;
             $isEnrolled = Enrollment_course::where('course_id', $course->id)
                 ->where('user_id', $student_id)
@@ -55,7 +55,7 @@ class StudentController extends Controller
         return response()->json($responseData);
     }
 
-    public function enrollCourse(Request $request, $course_id)
+    public function enrollCourse($course_id)
     {
 
         $user = Auth::user();
@@ -66,7 +66,7 @@ class StudentController extends Controller
             ->exists();
 
         if ($isEnrolled) {
-            return response()->json(['message' => 'Student is already enrolled in this course.'], 422);
+            return response()->json(['message' => 'Student is already enrolled']);
         }
 
         Enrollment_course::create([
@@ -74,44 +74,28 @@ class StudentController extends Controller
             'course_id' => $course_id,
         ]);
 
-        return response()->json(['message' => 'Student enrolled in the course successfully.']);
+        return response()->json(['message' => 'Student enrolled']);
     }
 
-    function getTasks(Request $request, $course_id)
+    function getTasks($course_id)
     {
-        $course = Course::find($course_id);
-        if (!Enrollment_course::isEnrolled($course_id)) {
-            return response()->json([
-                'status' => 'notEnrolled',
-                'course' => $course
-            ], 401);
+        $user = Auth::user();
+        $course = Course::with(['quizes', 'assignments', 'lectures', 'materials'])
+            ->find($course_id);
+
+        if ($course) {
+            $responseData = [
+                "quizes" => $course->quizes,
+                "assignments" => $course->assignments,
+                "lectures" => $course->lectures,
+                "materials" => $course->materials
+            ];
+            return response()->json($responseData);
+        } else {
+            return response()->json(["status" => "failed", "data" => "Course not found"]);
         }
-
-        $lectures = Lecture::where('course_id', $course_id)
-            ->select('id', 'course_id', 'name', 'description', 'date', 'created_at', 'updated_at', DB::raw("'lecture' as type"));
-
-
-        $materials = Material::where('course_id', $course_id)
-            ->select('id', 'course_id', 'name', 'description', 'file as file', 'created_at', 'updated_at', DB::raw("'material' as type"));
-
-
-        $assignments = Assignment::where('course_id', $course_id)
-            ->select('id', 'course_id', 'name', 'description', 'due as date',  'created_at', 'updated_at', DB::raw("'assignment' as type"));
-
-
-        $quizzes = Quiz::where('course_id', $course_id)
-            ->select('id', 'course_id', 'name', 'description', 'due as date', 'created_at', 'updated_at', DB::raw("'quiz' as type"));
-
-
-        $courseContent = $lectures->union($materials)->union($assignments)->union($quizzes)
-            ->orderBy('created_at', 'asc')
-            ->get();
-
-        return response()->json([
-            'status' => 'Enrolled',
-            'tasks' => $courseContent
-        ]);
     }
+
 
     function getOneTask(Request $request, $type, $course_id)
     {
@@ -162,11 +146,11 @@ class StudentController extends Controller
         $quizId = $request->input('quiz_id');
         $assignmentId = $request->input('assignment_id');
 
-        
+
         if ($file->isValid()) {
             $filePath = $file->store('submissions', 'public');
 
-            
+
             Submission::create([
                 'student_id' => $studentId,
                 'course_id' => $courseId,

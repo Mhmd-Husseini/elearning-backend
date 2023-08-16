@@ -57,7 +57,7 @@ use App\Http\Controllers\BackupController;
             Route::get('courses/{course_id?}', [StudentController::class, "getCourses"]);
             Route::get('enrolled-courses', [StudentController::class, "getEnrolledCourses"]);
             Route::post('enroll-course/{course_id}', [StudentController::class, "enrollCourse"]);
-            Route::get('getTasks/{student_id}', [StudentController::class, 'getTasks']);
+            Route::get('getTasks/{course_id}', [StudentController::class, 'getTasks']);
             Route::get('getOneTask/{type}/{id}', [StudentController::class, 'getOneTask']);
             Route::get('classmates/{course_id}', [StudentController::class, 'getClassmates']);
             Route::post('upload', [FileController::class, "upload"]);
