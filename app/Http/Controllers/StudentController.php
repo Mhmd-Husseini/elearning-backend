@@ -88,19 +88,19 @@ class StudentController extends Controller
         }
 
         $lectures = Lecture::where('course_id', $course_id)
-            ->select('id', 'course_id', 'title', 'description', 'date', 'created_at', 'updated_at', DB::raw("'lecture' as type"));
+            ->select('id', 'course_id', 'name', 'description', 'date', 'created_at', 'updated_at', DB::raw("'lecture' as type"));
 
 
         $materials = Material::where('course_id', $course_id)
-            ->select('id', 'course_id', 'title', 'description', 'file as file', 'created_at', 'updated_at', DB::raw("'material' as type"));
+            ->select('id', 'course_id', 'name', 'description', 'file as file', 'created_at', 'updated_at', DB::raw("'material' as type"));
 
 
         $assignments = Assignment::where('course_id', $course_id)
-            ->select('id', 'course_id', 'title', 'description', 'due as date',  'created_at', 'updated_at', DB::raw("'assignment' as type"));
+            ->select('id', 'course_id', 'name', 'description', 'due as date',  'created_at', 'updated_at', DB::raw("'assignment' as type"));
 
 
         $quizzes = Quiz::where('course_id', $course_id)
-            ->select('id', 'course_id', 'title', 'description', 'due as date', 'created_at', 'updated_at', DB::raw("'quiz' as type"));
+            ->select('id', 'course_id', 'name', 'description', 'due as date', 'created_at', 'updated_at', DB::raw("'quiz' as type"));
 
 
         $courseContent = $lectures->union($materials)->union($assignments)->union($quizzes)
