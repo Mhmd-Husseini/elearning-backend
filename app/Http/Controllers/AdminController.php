@@ -14,7 +14,7 @@ use function Laravel\Prompts\password;
 
 class AdminController extends Controller
 {
-    // User Functions
+
     public function addUser(Request $request)
     {
         try {
@@ -222,10 +222,18 @@ class AdminController extends Controller
             ->groupBy('date')
             ->get();
 
-        // Group course count by created_at date
         $coursesByDate = Course::selectRaw('DATE(created_at) as date, COUNT(id) as count')
             ->groupBy('date')
             ->get();
+
+            $teachersWithEnrollment = User::select('users.id as teacher_id', 'users.name as teacher_name')
+    ->selectRaw('COUNT(enrollment_courses.course_id) as total_enrollments')
+    ->leftJoin('courses', 'users.id', '=', 'courses.teacher_id')
+    ->leftJoin('enrollment_courses', 'courses.id', '=', 'enrollment_courses.course_id')
+    ->where('users.user_type_id', 2)
+    ->groupBy('users.id', 'users.name')
+    ->get();
+
     
             $result = [
                 'teachersNum' => $teachersNum,
@@ -239,9 +247,10 @@ class AdminController extends Controller
                 'teachersByDate' => $teachersByDate,
                 'studentsByDate' => $studentsByDate,
                 'parentsByDate' => $parentsByDate,
-                'coursesByDate' => $coursesByDate,            
+                'coursesByDate' => $coursesByDate,  
+                'teachersWithEnrollment' => $teachersWithEnrollment,          
             ];
-    
+
             return $this->customResponse($result);
         } catch(Exception $e) {
             return $this->customResponse($e->getMessage(), 'error', 500);
