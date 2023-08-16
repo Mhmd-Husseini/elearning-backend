@@ -13,4 +13,14 @@ class Attendance extends Model
         'lecture_id', 
         'attend'
     ];
+    public function lecture() {
+
+        return $this->belongsTo(Lecture::class);
+
+    }
+
+    public function student(){
+        
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
