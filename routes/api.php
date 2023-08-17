@@ -62,6 +62,7 @@ use App\Http\Controllers\BackupController;
             Route::get('classmates/{course_id}', [StudentController::class, 'getClassmates']);
             Route::post('upload', [FileController::class, "upload"]);
             Route::post('/submit', [StudentController::class, "submitFile"]);
+            Route::get('getGrade/{course_id}/{type}/{submission_id}', [StudentController::class, "getGrade"]);
         });
     
         Route::group(["middleware" => "auth.parent", 'prefix' => 'parent'], function(){

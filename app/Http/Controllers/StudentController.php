@@ -167,4 +167,22 @@ class StudentController extends Controller
 
         return response()->json(['message' => 'File upload failed'], 400);
     }
+
+public function getGrade($courseId, $type, $submissionId, Request $request)
+    {
+        $studentId = $request->user()->id;
+
+        $column = $type === 'quiz' ? 'quiz_id' : 'assignment_id';
+        $grade = Submission::where('student_id', $studentId)
+            ->where('course_id', $courseId)
+            ->where($column, $submissionId)
+            ->value('grade');
+
+        if ($grade === null) {
+            return response()->json(['error' => 'Grade not found'], 404);
+        }
+
+        return response()->json(['grade' => $grade]);
+    }
+
 }

@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\Submission;
 use App\Models\Attendance;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class ParentController extends Controller
